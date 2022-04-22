@@ -1,5 +1,6 @@
 package com.griddynamics.student.courses.calculatingDuration;
 
+import com.griddynamics.student.courses.StartAndEndDate;
 import com.griddynamics.student.courses.StudentCourses;
 
 import java.time.LocalDateTime;
@@ -7,25 +8,25 @@ import java.time.LocalDateTime;
 public class CalculatingRemainingDaysAndHoursOfTraining {
     private StudentCourses studentCourses;
     private LocalDateTime inputDateTime;
+    private LocalDateTime endDate;
     private CalculatingCourseDurationInWorkingDays calculatingCourseDurationInWorkingDays;
     private int leftDays;
     private int leftHours;
     private int daysFromTheLastCourse;
     private int hoursFromTheLastCourse;
 
-    public CalculatingRemainingDaysAndHoursOfTraining(StudentCourses studentCourses, LocalDateTime inputDateTime){
-        this.inputDateTime = inputDateTime;
+    public CalculatingRemainingDaysAndHoursOfTraining(StudentCourses studentCourses, StartAndEndDate startEndDate){
+        this.inputDateTime = startEndDate.getStartDate();
+        this.endDate = startEndDate.getEndDate();
         this.studentCourses = studentCourses;
         this.calculatingCourseDurationInWorkingDays = new CalculatingCourseDurationInWorkingDays(this.studentCourses);
     }
 
     public boolean areAllCoursesFinished(){
-        LocalDateTime currentDate = LocalDateTime.now();
-
         int datesBetweenStartAndCurrent = CalculatingWorkingDaysAndHoursBetweenDates.
-                getBusinessDaysBetweenDays(this.inputDateTime, currentDate);
+                getBusinessDaysBetweenDays(this.inputDateTime, this.endDate);
         int hoursBetweenStartAndCurrent = CalculatingWorkingDaysAndHoursBetweenDates.
-                getWorkingHoursBetweenDates(this.inputDateTime, currentDate);
+                getWorkingHoursBetweenDates(this.inputDateTime, this.endDate);
         int workingHoursBetweenStartAndCurrent = datesBetweenStartAndCurrent * 8 + hoursBetweenStartAndCurrent;
 
         int durationOfCoursesInDays = this.calculatingCourseDurationInWorkingDays.getCourseDurationInDays();

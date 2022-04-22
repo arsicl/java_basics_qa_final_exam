@@ -1,5 +1,6 @@
 package com.griddynamics.student.courses.generatingReports;
 
+import com.griddynamics.student.courses.StartAndEndDate;
 import com.griddynamics.student.courses.StudentCourses;
 import com.griddynamics.student.courses.calculatingDuration.CalculatingCourseDurationInWorkingDays;
 import com.griddynamics.student.courses.calculatingDuration.CalculatingRemainingDaysAndHoursOfTraining;
@@ -15,11 +16,13 @@ public class GeneratingShortAndLongReportsForRemainingStudentCourses {
     private CalculatingRemainingDaysAndHoursOfTraining remainingDaysAndHoursOfCourseParticularStudent;
     private CalculatingRemainingDaysAndHoursOfTraining[] remainingDaysAndHoursOfTraining;
     private LocalDateTime inputDateTime;
+    private StartAndEndDate startEndDate;
 
     public GeneratingShortAndLongReportsForRemainingStudentCourses(StudentCourses[] studentCourses){
         EnteringDateOfCourseStart.enterInputDate();
         this.inputDateTime = EnteringDateOfCourseStart.getDateInput();
-                this.generatingHeaderReportWithCurrentDate();
+        this.startEndDate = new StartAndEndDate(this.inputDateTime);
+        this.generatingHeaderReportWithCurrentDate();
         this.studentCourses = studentCourses;
         for(StudentCourses student: this.studentCourses){
             showShortReport(student);
@@ -30,6 +33,7 @@ public class GeneratingShortAndLongReportsForRemainingStudentCourses {
     public GeneratingShortAndLongReportsForRemainingStudentCourses(StudentCourses[] studentCourses, int inputParameterForReportType){
         EnteringDateOfCourseStart.enterInputDate();
         this.inputDateTime = EnteringDateOfCourseStart.getDateInput();
+        this.startEndDate = new StartAndEndDate(this.inputDateTime);
         this.generatingHeaderReportWithCurrentDate();
         this.studentCourses = studentCourses;
 
@@ -59,7 +63,7 @@ public class GeneratingShortAndLongReportsForRemainingStudentCourses {
         //Ivanov Ivan (Java Developer) - Training is not finished. 1 d 3 hours are left until the end.
         //Training completed. 3 hours have passed since the end.
         this.studentTrainingParticularStudent = studentCourses;
-        this.remainingDaysAndHoursOfCourseParticularStudent = new CalculatingRemainingDaysAndHoursOfTraining(this.studentTrainingParticularStudent, this.inputDateTime);
+        this.remainingDaysAndHoursOfCourseParticularStudent = new CalculatingRemainingDaysAndHoursOfTraining(this.studentTrainingParticularStudent, this.startEndDate);
 
         StringBuilder shortReport = new StringBuilder();
         shortReport.append(studentTrainingParticularStudent.getStudentName() + " (");
@@ -89,7 +93,7 @@ public class GeneratingShortAndLongReportsForRemainingStudentCourses {
 
     private void showFullReport(StudentCourses studentCourses) {
         this.studentTrainingParticularStudent = studentCourses;
-        this.remainingDaysAndHoursOfCourseParticularStudent = new CalculatingRemainingDaysAndHoursOfTraining(this.studentTrainingParticularStudent, this.inputDateTime);
+        this.remainingDaysAndHoursOfCourseParticularStudent = new CalculatingRemainingDaysAndHoursOfTraining(this.studentTrainingParticularStudent, this.startEndDate);
         CalculatingCourseDurationInWorkingDays calculatingCourseDurationInWorkingDays = new CalculatingCourseDurationInWorkingDays(this.studentTrainingParticularStudent);
 
         StringBuilder fullReport = new StringBuilder();

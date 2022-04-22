@@ -39,7 +39,7 @@ public class CalculatingWorkingDaysAndHoursBetweenDates {
         }
     }
 
-    public static int getWorkingHoursInStartEndDateInSum(LocalDateTime startDate, LocalDateTime endDate){
+    private static int getWorkingHoursInStartEndDateInSum(LocalDateTime startDate, LocalDateTime endDate){
         int startDateInHours = getWorkingHoursInStartDate(startDate);
         int endDateInHours = getWorkingHoursInEndDate(endDate);
 
@@ -47,7 +47,7 @@ public class CalculatingWorkingDaysAndHoursBetweenDates {
     }
 
 
-    public static int getWorkingHoursInStartDate(LocalDateTime startDate){
+    private static int getWorkingHoursInStartDate(LocalDateTime startDate){
         int workingHours = 0;
         if(isDayWorkingDay(startDate)){
             int startDateInHours = startDate.getHour();
@@ -66,7 +66,7 @@ public class CalculatingWorkingDaysAndHoursBetweenDates {
         return workingHours;
     }
 
-    public static int getWorkingHoursInEndDate(LocalDateTime endDate){
+    private static int getWorkingHoursInEndDate(LocalDateTime endDate){
         int workingHours = 0;
         if(isDayWorkingDay(endDate)){
             int endDateInHours = endDate.getHour();
