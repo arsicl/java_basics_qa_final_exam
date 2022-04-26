@@ -30,17 +30,17 @@ public class CalculatingWorkingDaysAndHoursBetweenDatesTests {
     @Test
     public void verifyWorkingDaysAndHoursAreCalculatedProperly(){
         // given
-        String startDateString = "2020-06-01T08:00:00";;
+        String startDateString = "2020-06-01T08:00:00";
         String endDateString = "2020-06-08T15:00:00";
         startDate = LocalDateTime.parse(startDateString);
         endDate = LocalDateTime.parse(endDateString);
         Duration duration = Duration.between(startDate, endDate);
 
         long expectedDays = duration.toDays() - 2; // subtracted weekend days
-        // workingDays are without start and end date,
-        // where there are 8 hours in start date and 5 hours in end date (10:00h - 15:00h),
+        // workingDays are without end date,
+        // where there are 5 hours in end date (10:00h - 15:00h),
         // hours are not in sum, just remaining working hours without working days
-        long expectedHours = (expectedDays * 8 + 8 + 5) % 8;
+        long expectedHours = (expectedDays * 8 + 5) % 8;
 
         // when
         int workingDays = CalculatingWorkingDaysAndHoursBetweenDates.getBusinessDaysBetweenDays(startDate, endDate);

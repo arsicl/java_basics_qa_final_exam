@@ -12,7 +12,7 @@ public class CalculatingCourseDurationInWorkingDays {
         this.calculatingTrainingDuration();
     }
 
-    public void calculatingTrainingDuration(){
+    private void calculatingTrainingDuration(){
         Integer sum = 0;
 
         for(Integer courseDuration: this.studentCourses.getAllStudentCourses().values()){

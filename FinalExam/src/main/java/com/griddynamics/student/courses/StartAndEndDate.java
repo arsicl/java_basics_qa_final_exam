@@ -23,12 +23,4 @@ public class StartAndEndDate {
     public LocalDateTime getEndDate(){
         return this.endDate;
     }
-
-    public void setStartDate(LocalDateTime startDate){
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate){
-        this.endDate = endDate;
-    }
 }

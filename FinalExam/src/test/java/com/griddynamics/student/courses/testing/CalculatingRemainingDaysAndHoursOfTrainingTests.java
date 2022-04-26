@@ -25,15 +25,15 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
 
     @BeforeEach
     public void createStudent(){
-        String startDateString = "2020-06-01T08:00:00";;
+        String startDateString = "2020-06-01T08:00:00";
         String endDateString = "2020-06-08T15:00:00";
         startDate = LocalDateTime.parse(startDateString);
         endDate = LocalDateTime.parse(endDateString);
         startEndDate = new StartAndEndDate(startDate, endDate);
         duration = Duration.between(startDate, endDate);
         // from days between weekend days are subtracted
-        // and added 8 hours in start date and 5 hours in end date (10:00h - 15:00h),
-        workingHoursInSumBetweenDates =  (duration.toDays() - 2) * 8 + 8 + 5;
+        // and added 5 hours in end date (10:00h - 15:00h),
+        workingHoursInSumBetweenDates =  (duration.toDays() - 2) * 8 + 5;
     }
 
     @Test
@@ -43,9 +43,9 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
         AssigningCoursesToStudents.assignJavaCourses(javaStudent);
         durationInWorkingDaysJavaCourse = new CalculatingCourseDurationInWorkingDays(javaStudent);
         int durationInWorkingHoursJava = durationInWorkingDaysJavaCourse.getCourseDurationInHours();
+        int durationInWorkingDays = durationInWorkingDaysJavaCourse.getCourseDurationInDays();
         CalculatingRemainingDaysAndHoursOfTraining calculatingRemainingDaysAndHoursOfTraining =
                 new CalculatingRemainingDaysAndHoursOfTraining(javaStudent, startEndDate);
-        int durationInWorkingDays = durationInWorkingDaysJavaCourse.getCourseDurationInDays();
 
         // when
         boolean areCoursesFinished = calculatingRemainingDaysAndHoursOfTraining.areAllCoursesFinished();
@@ -53,9 +53,8 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
         int leftHours = calculatingRemainingDaysAndHoursOfTraining.getLeftHours();
 
         // then
-        long expectedDays = durationInWorkingDays - (workingHoursInSumBetweenDates - durationInWorkingHoursJava) / 8;
-        long expectedHours = ((durationInWorkingDays * 8 + durationInWorkingHoursJava) - workingHoursInSumBetweenDates)% 8;
-        assertEquals(expectedDays, leftDays);
+        long expectedDays = (durationInWorkingDays * 8 + durationInWorkingHoursJava - workingHoursInSumBetweenDates) / 8;
+        long expectedHours = (durationInWorkingDays * 8 + durationInWorkingHoursJava -workingHoursInSumBetweenDates) % 8;
         assertEquals(expectedHours, leftHours);
     }
 
@@ -64,7 +63,9 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
         // given
         j2eeStudent = new StudentCourses("Sidorov Ivan", "J2EE Developer");
         AssigningCoursesToStudents.assignJ2EECourses(j2eeStudent);
-        durationInWorkingDaysJ2EECourse = new CalculatingCourseDurationInWorkingDays(j2eeStudent);;
+        durationInWorkingDaysJ2EECourse = new CalculatingCourseDurationInWorkingDays(j2eeStudent);
+        int durationWorkingDaysj2ee = durationInWorkingDaysJ2EECourse.getCourseDurationInDays();
+        int durationInWorkingHours = durationInWorkingDaysJ2EECourse.getCourseDurationInHours();
         CalculatingRemainingDaysAndHoursOfTraining calculatingRemainingDaysAndHoursOfTraining =
                 new CalculatingRemainingDaysAndHoursOfTraining(j2eeStudent, startEndDate);
 
@@ -74,9 +75,10 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
         int hoursFromLastCourse = calculatingRemainingDaysAndHoursOfTraining.getHoursFromTheLastCourse();
 
         // then
-        // from the last course 3 hours passed
-        assertEquals(0, daysFromLastCourse);
-        assertEquals(3, hoursFromLastCourse);
+        long expectedDays = (workingHoursInSumBetweenDates - (durationWorkingDaysj2ee * 8 + durationInWorkingHours)) / 8;
+        long expectedHours = (workingHoursInSumBetweenDates - (durationWorkingDaysj2ee * 8 + durationInWorkingHours)) % 8;
+        assertEquals(expectedDays, daysFromLastCourse);
+        assertEquals(expectedHours, hoursFromLastCourse);
     }
 
     @Test
@@ -86,7 +88,7 @@ public class CalculatingRemainingDaysAndHoursOfTrainingTests {
         AssigningCoursesToStudents.assignJavaCourses(javaStudent);
         durationInWorkingDaysJavaCourse = new CalculatingCourseDurationInWorkingDays(javaStudent);
         // subtracted more days than it takes for  java courses to be finished
-        LocalDateTime startingDate = (LocalDateTime.now()).minusDays(durationInWorkingDaysJavaCourse.getCourseDurationInDays() + 3);
+        LocalDateTime startingDate = (LocalDateTime.now()).minusDays(durationInWorkingDaysJavaCourse.getCourseDurationInDays() * 2);
         startEndDate = new StartAndEndDate(startingDate);
         CalculatingRemainingDaysAndHoursOfTraining calculatingRemainingDaysAndHoursOfTraining =
                 new CalculatingRemainingDaysAndHoursOfTraining(javaStudent, startEndDate);
